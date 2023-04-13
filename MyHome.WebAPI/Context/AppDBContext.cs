@@ -15,7 +15,7 @@ namespace MyHome.WebAPI.Context
         {
 
         }
-        public DbSet<TestEntity> tblTest { get; set; }
+        public DbSet<TestProductEntity> tblTestProduct { get; set; }
 
     }
 }

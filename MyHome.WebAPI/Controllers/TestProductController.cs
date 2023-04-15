@@ -14,10 +14,17 @@ namespace MyHome.WebAPI.Controllers
     {
         private readonly AppDBContext appDBContext;
         private readonly ITestProductBL testProductBL;
-        public TestProductController(AppDBContext appDBContext, ITestProductBL testProductBL)
+        private readonly ILogger<TestProductController> logger;
+        public TestProductController(AppDBContext appDBContext, ITestProductBL testProductBL, ILogger<TestProductController> logger)
         {
             this.appDBContext = appDBContext;
-            this.testProductBL = testProductBL;   
+            this.testProductBL = testProductBL;
+            this.logger = logger;
+
+            logger.LogDebug("LogDebug -> TestProductController");
+            logger.LogInformation("LogInformation -> TestProductController");
+            logger.LogWarning("LogWarning -> TestProductController");
+            logger.LogError("LogError -> TestProductController");
         }
 
         [HttpPost("AddTestProductAsync")]
@@ -71,9 +78,7 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
-
         
-
         [HttpPut("UpdateTestProductAsync")]
         public async Task<IActionResult> UpdateTestProductAsync(TestProductEntity testProductEntity)
         {

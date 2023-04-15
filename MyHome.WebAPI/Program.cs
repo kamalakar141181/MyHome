@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MyHome.WebAPI.Business;
 using MyHome.WebAPI.Context;
 using MyHome.WebAPI.Helpers;
+using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -14,6 +15,7 @@ builder.Services.AddTransient<ITestProductBLUsingADODotNet, TestProductBLUsingAD
 builder.Services.AddTransient<ISqlHelper, SqlHelper>();
 builder.Services.AddTransient<IConnection, Connection>();
 builder.Services.AddSwaggerGen();
+builder.Logging.AddNLog();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -8,6 +8,7 @@ namespace MyHome.WebAPI.Context
     {
         public AppDBContext()
         {
+
         }
 
         public AppDBContext(DbContextOptions<AppDBContext> options)

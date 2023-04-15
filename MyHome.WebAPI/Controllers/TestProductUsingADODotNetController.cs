@@ -14,12 +14,10 @@ namespace MyHome.WebAPI.Controllers
     {
         private readonly ITestProductBLUsingADODotNet testProductBLUsingADODotNet;
 
-
         public TestProductUsingADODotNetController(ITestProductBLUsingADODotNet testProductBLUsingADODotNet)
         {
             this.testProductBLUsingADODotNet = testProductBLUsingADODotNet;
         }
-
         [HttpPost("AddTestProduct-ADO.NET")]
         public async Task<IActionResult> AddTestProduct(TestProductEntity testProductEntity)
         {
@@ -51,7 +49,6 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
-
         [HttpGet("GetProductByID-ADO.NET")]
         public async Task<IEnumerable<TestProductEntity>> GetProductByID(int testProductID)
         {
@@ -71,9 +68,6 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
-
-
-
         [HttpPut("UpdateTestProduct-ADO.NET")]
         public async Task<IActionResult> UpdateTestProduct(TestProductEntity testProductEntity)
         {

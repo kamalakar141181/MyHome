@@ -11,13 +11,11 @@ namespace MyHome.WebAPI.Helpers
         private readonly ILogger<SqlHelper> logger;
         private IDbConnection dbConnection;
         private IDbTransaction dbtransaction;
-
         public SqlHelper(IConnection connection, ILogger<SqlHelper> logger)
         {            
             this.connection = connection;
             this.logger = logger;
         }
-
         public void OpenConnection()
         {
             dbConnection = connection != null ? connection.GetConnection : null;
@@ -26,7 +24,6 @@ namespace MyHome.WebAPI.Helpers
                 dbConnection.Open();
             }           
         }
-
         public void CloseConnection()
         {
             dbConnection = connection != null ? connection.GetConnection : null;
@@ -35,7 +32,6 @@ namespace MyHome.WebAPI.Helpers
                 dbConnection.Close();
             }
         }
-
         public void StartTransaction()
         {
             if (dbConnection != null && dbConnection.State == ConnectionState.Closed)
@@ -51,7 +47,6 @@ namespace MyHome.WebAPI.Helpers
             if (dbConnection != null)
                 dbConnection.Close();
         }
-
         public void RollbackTransaction()
         {
             if (dbtransaction != null)
@@ -60,39 +55,32 @@ namespace MyHome.WebAPI.Helpers
             if (dbConnection != null)
                 dbConnection.Close();
         }
-
         public DynamicParameters CreateParameter(string name, object value)
         {
             return CreateParameter(name, value, null, null, null, null, null);
         }
-
         public DynamicParameters CreateParameter(string name, object value, DbType? dbType)
         {
             return CreateParameter(name, value, dbType, null, null, null, null);
         }
-
         public DynamicParameters CreateParameter(string name, object value, DbType? dbType, ParameterDirection? direction)
         {
             return CreateParameter(name, value, dbType, direction, null, null, null);
         }
-
         public DynamicParameters CreateParameter(string name, object value, DbType? dbType, ParameterDirection? direction, int? size)
         {
             return CreateParameter(name, value, dbType, direction, size, null, null);
         }
-
         public DynamicParameters CreateParameter(string name, object value = null, DbType? dbType = null, ParameterDirection? direction = null, int? size = null, byte? precision = null, byte? scale = null)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add(name, value, dbType, direction, size, precision, scale);
             return dynamicParameters;
-        }
-        
+        }        
         public DynamicParameters GenerateParametersFromModel(object model, bool generateId)
         {
             throw new NotImplementedException();
         }
-
         public List<T> GetData<T>(string query)
         {
             try
@@ -111,7 +99,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public List<T> GetData<T>(string query, DynamicParameters dynamicParameters)
         {
             try
@@ -130,7 +117,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public List<T> GetData<T>(string storedProcedure, DynamicParameters dynamicParameters, CommandType commandType = CommandType.StoredProcedure)
         {
             try
@@ -149,7 +135,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public T GetScalar<T>(string storedProcedure, DynamicParameters dynamicParameters, CommandType commandType = CommandType.StoredProcedure)
         {
             try
@@ -168,7 +153,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public TResult DoTransaction<TResult>(Func<IDbTransaction, TResult> task, System.Data.IsolationLevel isolationLevel = System.Data.IsolationLevel.Unspecified)
         {            
             using ( var transaction = dbConnection.BeginTransaction(isolationLevel) )
@@ -188,7 +172,6 @@ namespace MyHome.WebAPI.Helpers
                 {
                     CloseConnection();
                 }
-
             }            
         }
 
@@ -209,7 +192,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public void SaveData<T>(string storedProcedure, DynamicParameters dynamicParameters, T model)
         {
             try
@@ -227,7 +209,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public void SaveDataInTransaction<T>(string storedProcedure, DynamicParameters dynamicParameters)
         {
             try
@@ -248,7 +229,6 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public void SaveDataInTransaction<T>(string storedProcedure, T model)
         {
             try
@@ -268,8 +248,7 @@ namespace MyHome.WebAPI.Helpers
             {
                 CloseConnection();
             }
-        }
-        
+        }        
         protected virtual void Dispose(bool isDispose)
         {
             if(isDispose)
@@ -278,11 +257,9 @@ namespace MyHome.WebAPI.Helpers
                 CloseConnection();
             }
         }
-
         public void Dispose()
         {
             Dispose(true);
-        }
-                
+        }                
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyHome.WebAPI.Context;
 using MyHome.WebAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using MyHome.WebAPI.Business;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace MyHome.WebAPI.Controllers
 {
@@ -111,6 +108,5 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
-
     }
 }

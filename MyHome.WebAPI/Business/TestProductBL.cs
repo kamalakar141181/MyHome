@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MyHome.WebAPI.Context;
 using MyHome.WebAPI.Models;
-using System.Reflection.Metadata;
 
 namespace MyHome.WebAPI.Business
-{   
+{
     public class TestProductBL : ITestProductBL
     {
         private readonly AppDBContext appDBContext;
@@ -15,7 +13,6 @@ namespace MyHome.WebAPI.Business
         {
             this.appDBContext = dbContext;
         }
-
         public async Task<int> AddTestProductAsync(TestProductEntity testProductEntity)
         {
             var parameter = new List<SqlParameter>();
@@ -27,14 +24,12 @@ namespace MyHome.WebAPI.Business
 
             return result;
         }
-
         public async Task<List<TestProductEntity>> GetTestProductListAsync()
         {
             return await appDBContext.tblTestProduct
                 .FromSqlRaw<TestProductEntity>("spGetTestProductList")
                 .ToListAsync();
         }
-
         public async Task<IEnumerable<TestProductEntity>> GetTestProductByIdAsync(int testProductID)
         {
             var param = new SqlParameter("@ID", testProductID);
@@ -43,10 +38,7 @@ namespace MyHome.WebAPI.Business
                             .FromSqlRaw(@"EXEC spGetTestProductByID @ID", param).ToListAsync());
 
             return productDetails;
-        }
-
-        
-
+        }                
         public async Task<int> UpdateTestProductAsync(TestProductEntity testProductEntity)
         {
             var parameter = new List<SqlParameter>();

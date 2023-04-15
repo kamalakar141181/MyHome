@@ -9,8 +9,7 @@ namespace MyHome.WebAPI.Helpers
         void CloseConnection();
         void CommitTransaction();
         void RollbackTransaction();
-        void StartTransaction();
-        // https://github.com/DapperLib/Dapper/blob/main/Dapper/DynamicParameters.cs // We can rename "CreateParameter" as Add
+        void StartTransaction();        
         DynamicParameters CreateParameter(string name, object value);
         DynamicParameters CreateParameter(string name, object value, DbType? dbType);
         DynamicParameters CreateParameter(string name, object value, DbType? dbType, ParameterDirection? direction);

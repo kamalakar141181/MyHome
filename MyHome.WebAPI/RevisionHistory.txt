@@ -1,1 +1,2 @@
 ﻿1. RevisionHistory.txt file added to track the changes and all unwanted code and space removed. 
+2. JSON Serialization Settings added and request logged in log file.

@@ -2,6 +2,7 @@
 using MyHome.WebAPI.Context;
 using MyHome.WebAPI.Models;
 using MyHome.WebAPI.Business;
+using Newtonsoft.Json;
 
 namespace MyHome.WebAPI.Controllers
 {
@@ -12,18 +13,35 @@ namespace MyHome.WebAPI.Controllers
         private readonly AppDBContext appDBContext;
         private readonly ITestProductBL testProductBL;
         private readonly ILogger<TestProductController> logger;
+
+        #region JSON Serialization Settings
+        JsonSerializerSettings setting = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        };
+        #endregion
+
+        #region Constructor
         public TestProductController(AppDBContext appDBContext, ITestProductBL testProductBL, ILogger<TestProductController> logger)
         {
-            this.appDBContext = appDBContext;
-            this.testProductBL = testProductBL;
-            this.logger = logger;
+            try
+            {
+                logger.LogInformation("TestProductController() -> Execution Started");
+                this.appDBContext = appDBContext;
+                this.testProductBL = testProductBL;
+                this.logger = logger;
+                logger.LogInformation("TestProductController() -> Execution Completed");
+            }
+            catch (Exception)
+            {
 
-            logger.LogDebug("LogDebug -> TestProductController");
-            logger.LogInformation("LogInformation -> TestProductController");
-            logger.LogWarning("LogWarning -> TestProductController");
-            logger.LogError("LogError -> TestProductController");
+                throw;
+            }
         }
+        #endregion
 
+        #region Action Methods
         [HttpPost("AddTestProductAsync")]
         public async Task<IActionResult> AddTestProductAsync(TestProductEntity testProductEntity)
         {
@@ -34,8 +52,8 @@ namespace MyHome.WebAPI.Controllers
 
             try
             {
+                logger.LogTrace(JsonConvert.SerializeObject(testProductEntity, Formatting.Indented, setting));
                 var response = await testProductBL.AddTestProductAsync(testProductEntity);
-
                 return Ok(response);
             }
             catch
@@ -43,6 +61,7 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
+
         [HttpGet("getproductlist")]
         public async Task<List<TestProductEntity>> GetProductListAsync()
         {
@@ -61,6 +80,7 @@ namespace MyHome.WebAPI.Controllers
         {
             try
             {
+                logger.LogTrace("Test Product ID is : {0} ", JsonConvert.SerializeObject(testProductID, Formatting.Indented, setting));
                 var response = await testProductBL.GetTestProductByIdAsync(testProductID);
 
                 if (response == null)
@@ -86,6 +106,7 @@ namespace MyHome.WebAPI.Controllers
 
             try
             {
+                logger.LogTrace(JsonConvert.SerializeObject(testProductEntity, Formatting.Indented, setting));
                 var result = await testProductBL.UpdateTestProductAsync(testProductEntity);
                 return Ok(result);
             }
@@ -100,6 +121,7 @@ namespace MyHome.WebAPI.Controllers
         {
             try
             {
+                logger.LogTrace("Test Product ID is : {0} ", JsonConvert.SerializeObject(testProductID, Formatting.Indented, setting));
                 var response = await testProductBL.DeleteTestProductAsync(testProductID);
                 return response;
             }
@@ -108,5 +130,7 @@ namespace MyHome.WebAPI.Controllers
                 throw;
             }
         }
+
+        #endregion
     }
 }

@@ -33,10 +33,9 @@ namespace MyHome.WebAPI.Controllers
                 this.logger = logger;
                 logger.LogInformation("TestProductController() -> Execution Completed");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                logger.LogTrace(ex.Message);               
             }
         }
         #endregion
@@ -56,27 +55,35 @@ namespace MyHome.WebAPI.Controllers
                 var response = await testProductBL.AddTestProductAsync(testProductEntity);
                 return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("getproductlist")]
-        public async Task<List<TestProductEntity>> GetProductListAsync()
+        public async Task<IActionResult> GetProductListAsync()
         {
             try
             {
-                return await testProductBL.GetTestProductListAsync();
+                var response = await testProductBL.GetTestProductListAsync();
+
+                if (response == null)
+                {
+                    return BadRequest("No records found");
+                }
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetProductByIdAsync")]
-        public async Task<IEnumerable<TestProductEntity>> GetProductByIdAsync(int testProductID)
+        public async Task<IActionResult> GetProductByIdAsync(int testProductID)
         {
             try
             {
@@ -85,14 +92,14 @@ namespace MyHome.WebAPI.Controllers
 
                 if (response == null)
                 {
-                    return null;
+                    return BadRequest("No records found");
                 }
-
-                return response;
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         
@@ -101,33 +108,38 @@ namespace MyHome.WebAPI.Controllers
         {
             if (testProductEntity == null)
             {
-                return BadRequest();
+                return BadRequest("Inputs not received");
             }
-
             try
             {
                 logger.LogTrace(JsonConvert.SerializeObject(testProductEntity, Formatting.Indented, setting));
-                var result = await testProductBL.UpdateTestProductAsync(testProductEntity);
-                return Ok(result);
+                var response = await testProductBL.UpdateTestProductAsync(testProductEntity);
+                return Ok(response);
             }
-            catch
+            catch( Exception ex )
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("DeleteTestProductAsync")]
-        public async Task<int> DeleteTestProductAsync(int testProductID)
+        public async Task<IActionResult> DeleteTestProductAsync(int testProductID)
         {
+            if (testProductID < 0)
+            {
+                return BadRequest("Enter valid Product ID");
+            }
             try
             {
                 logger.LogTrace("Test Product ID is : {0} ", JsonConvert.SerializeObject(testProductID, Formatting.Indented, setting));
                 var response = await testProductBL.DeleteTestProductAsync(testProductID);
-                return response;
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 

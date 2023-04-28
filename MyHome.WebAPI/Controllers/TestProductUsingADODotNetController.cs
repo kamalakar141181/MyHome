@@ -39,52 +39,61 @@ namespace MyHome.WebAPI.Controllers
         {
             if (testProductEntity == null)
             {
-                return BadRequest();
+                return BadRequest("Inputs not received");
             }
-
             try
             {
                 logger.LogTrace(JsonConvert.SerializeObject(testProductEntity, Formatting.Indented, setting));
                 var response = await testProductBLUsingADODotNet.AddTestProduct(testProductEntity);
                 return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetProductList-ADO.NET")]
-        public async Task<List<TestProductEntity>> GetProductList()
+        public async Task<IActionResult> GetProductList()
         {
             try
             {
-                return await testProductBLUsingADODotNet.GetTestProductList();
+                var response = await testProductBLUsingADODotNet.GetTestProductList();
+                if (response == null)
+                {
+                    return BadRequest("No records found");
+                }
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("GetProductByID-ADO.NET")]
-        public async Task<IEnumerable<TestProductEntity>> GetProductByID(int testProductID)
+        public async Task<IActionResult> GetProductByID(int testProductID)
         {
+            if (testProductID < 0)
+            {
+                return BadRequest("Enter valid Product ID");
+            }
             try
             {
                 logger.LogTrace("Test Product ID is : {0} ",JsonConvert.SerializeObject(testProductID, Formatting.Indented, setting));
                 var response = await testProductBLUsingADODotNet.GetTestProductByID(testProductID);
-
                 if (response == null)
                 {
-                    return null;
+                    return BadRequest("No records found");
                 }
-
-                return response;
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -99,27 +108,29 @@ namespace MyHome.WebAPI.Controllers
             try
             {
                 logger.LogTrace(JsonConvert.SerializeObject(testProductEntity, Formatting.Indented, setting));
-                var result = await testProductBLUsingADODotNet.UpdateTestProduct(testProductEntity);
-                return Ok(result);
+                var response = await testProductBLUsingADODotNet.UpdateTestProduct(testProductEntity);
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("DeleteTestProduct-ADO.NET")]
-        public async Task<int> DeleteTestProduct(int testProductID)
+        public async Task<IActionResult> DeleteTestProduct(int testProductID)
         {
             try
             {
                 logger.LogTrace("Test Product ID is : {0} ", JsonConvert.SerializeObject(testProductID, Formatting.Indented, setting));
                 var response = await testProductBLUsingADODotNet.DeleteTestProduct(testProductID);
-                return response;
+                return Ok(response);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                logger.LogTrace(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         #endregion

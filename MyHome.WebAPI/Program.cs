@@ -12,6 +12,7 @@ builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(buil
 builder.Services.AddTransient<ITestProductBLUsingADODotNet, TestProductBLUsingADODotNet>();
 builder.Services.AddTransient<ISqlHelper, SqlHelper>();
 builder.Services.AddTransient<IConnection, Connection>();
+builder.Services.AddTransient<IUtilityBL, UtilityBL>();
 builder.Services.AddSwaggerGen();
 builder.Logging.AddNLog();
 var app = builder.Build();
